@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body
 <div class="container">
     <h2 class="mt-5">Pahana Edu Bookstore - Login</h2>
     <% if (request.getAttribute("error") != null) { %>
