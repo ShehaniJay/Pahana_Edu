@@ -1,30 +1,22 @@
 package com.pahanaedu.bookstore.model;
 
+import java.sql.Timestamp;
+
 public class Bill {
-    private String billId;
+    private int billId;
     private String accountNumber;
-    private String itemId;
-    private int quantity;
+    private String items;
     private double total;
+    private Timestamp date;
 
-    public Bill() {}
-
-    public Bill(String billId, String accountNumber, String itemId, int quantity, double total) {
-        this.billId = billId;
-        this.accountNumber = accountNumber;
-        this.itemId = itemId;
-        this.quantity = quantity;
-        this.total = total;
-    }
-
-    public String getBillId() { return billId; }
-    public void setBillId(String billId) { this.billId = billId; }
+    public int getBillId() { return billId; }
+    public void setBillId(int billId) { this.billId = billId; }
     public String getAccountNumber() { return accountNumber; }
     public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
-    public String getItemId() { return itemId; }
-    public void setItemId(String itemId) { this.itemId = itemId; }
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public String getItems() { return items; }
+    public void setItems(String items) { this.items = items; }
     public double getTotal() { return total; }
     public void setTotal(double total) { this.total = total; }
+    public Timestamp getDate() { return date; }
+    public void setDate(Timestamp date) { this.date = date; }
 }

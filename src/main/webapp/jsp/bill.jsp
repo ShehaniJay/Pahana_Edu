@@ -7,6 +7,10 @@
 <head>
     <title>Pahana Edu - Generate Bill</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -15,17 +19,13 @@
             background-color: #f4f7fa;
             color: #333;
         }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-        }
+
         h1, h2, h3 {
             margin-top: 0;
         }
         .form-section, .bill-preview, .bill-history {
+            width: 100%;
+            position: static;
             background-color: white;
             padding: 13px;
             border-radius: 5px;
@@ -33,16 +33,16 @@
         }
         .form-section {
             flex: 1;
-            width: 250px;
+            width: 600px;
         }
         .bill-preview, .bill-history {
-            width: 390px;
+            width: 600px;
             position: sticky;
             top: 20px;
             height: fit-content;
         }
         .bill-history {
-            width: 250px;
+            width: 600px;
             position: sticky;
             top: 20px;
             height: fit-content;
@@ -126,18 +126,26 @@
         .printable-bill.visible {
             display: block;
         }
-        @media print {
-            body * {
-                visibility: hidden;
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
             }
-            .printable-bill, .printable-bill * {
-                visibility: visible;
-            }
-            .printable-bill {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
+
+            @media print {
+                /*body * {*/
+                /*    visibility: hidden;*/
+                /*}*/
+                .printable-bill, .printable-bill * {
+                    visibility: visible;
+                }
+
+                .printable-bill {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                }
             }
         }
     </style>
@@ -150,18 +158,35 @@
                     setTimeout(() => {
                         window.print();
                         billSection.classList.remove('visible');
-                        window.location.href = "${pageContext.request.contextPath}/bill?accountNumber=${customer.accountNumber}";
-                    }, 100);
+                        window.location.href = "${pageContext.request.contextPath}/bill?accountNumber=${param.accountNumber}";
+                    }, 200);
                 }
+            } else if ('${showBillOnly}' === 'true' && '${not empty error}') {
+                alert('Error generating bill: ${error}');
+                window.location.href = "${pageContext.request.contextPath}/bill?accountNumber=${param.accountNumber}";
             }
         };
     </script>
 </head>
 <body>
+<h1>Welcome, ${sessionScope.username}</h1>
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Pahana Edu</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="${pageContext.request.contextPath}/jsp/dashboard.jsp">Dashboard</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/customer">Add Customer</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/item">Manage Items</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/bill">Generate Bill</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/help">Help</a>
+            <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
+        </div>
+
+    </nav>
 <div class="container">
     <c:if test="${not showBillOnly}">
         <div class="form-section">
-            <h1>Welcome, ${sessionScope.username}</h1>
+
             <h2>Generate Bill</h2>
             <% if (request.getAttribute("message") != null) { %>
             <div class="message"><%= request.getAttribute("message") %></div>
@@ -201,7 +226,7 @@
                         <select id="itemId" name="itemId" required>
                             <option value="">-- Select Item --</option>
                             <c:forEach var="item" items="${items}">
-                                <option value="${item.itemId}">${item.name} - $${item.price}</option>
+                                <option value="${item.itemId}">${item.name} - Rs. ${item.price}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -221,7 +246,7 @@
                     </form>
                 </c:if>
             </c:if>
-            <a href="dashboard.jsp" class="back-btn">Back</a>
+            <a href="${pageContext.request.contextPath}/jsp/dashboard.jsp" class="btn btn-secondary mt-3">Back</a>
         </div>
 
         <div class="bill-preview">
@@ -243,8 +268,8 @@
                         <tr>
                             <td>${item.name}</td>
                             <td>${entry.value}</td>
-                            <td>$${item.price}</td>
-                            <td>$${item.price * entry.value}</td>
+                            <td>Rs. ${item.price}</td>
+                            <td>Rs. ${item.price * entry.value}</td>
                             <td>
                                 <form action="bill" method="post" style="display:inline;">
                                     <input type="hidden" name="action" value="update">
@@ -264,7 +289,7 @@
                     </c:forEach>
                     <tr>
                         <td colspan="4"><strong>Total Amount</strong></td>
-                        <td><strong>$${totalAmount}</strong></td>
+                        <td><strong>Rs. ${totalAmount}</strong></td>
                     </tr>
                     </tbody>
                 </table>
@@ -278,27 +303,32 @@
             <h3>Bill History</h3>
             <c:if test="${not empty bills}">
                 <c:forEach var="bill" items="${bills}">
-                    <c:set var="item" value="${itemsMap[bill.itemId]}"/>
                     <div style="margin-bottom: 20px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
-                        <h4>Bill ID: ${bill.billId}</h4>
-                        <p><strong>Customer:</strong> ${finalCustomerName}</p>
-                        <p><strong>Date:</strong> <fmt:formatDate value="${finalBillDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                        <p><strong>Bill ID:</strong> ${bill.billId}</p>
+                        <p><strong>Date:</strong> <fmt:formatDate value="${bill.date}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
                         <table>
                             <thead>
                             <tr>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
-                                <th>Total</th>
+                                <th>Price</th>
+                                <th>Amount</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>${item.name}</td>
-                                <td>${bill.quantity}</td>
-                                <td>$${bill.total}</td>
-                            </tr>
+                            <c:forTokens var="item" items="${bill.items}" delims=";">
+                                <c:set var="details" value="${fn:split(item, ':')}"/>
+                                <c:set var="itemObj" value="${itemsMap[details[0]]}"/>
+                                <tr>
+                                    <td>${itemObj.name}</td>
+                                    <td>${details[1]}</td>
+                                    <td>Rs. ${itemObj.price}</td>
+                                    <td>Rs. ${details[2]}</td>
+                                </tr>
+                            </c:forTokens>
                             </tbody>
                         </table>
+                        <p><strong>Total Amount:</strong> $${bill.total}</p>
                     </div>
                 </c:forEach>
             </c:if>
@@ -308,40 +338,49 @@
         </div>
     </c:if>
 
-    <c:if test="${showBillOnly and not empty finalItems}">
-        <div class="printable-bill visible">
-            <h3>Final Bill</h3>
-            <p><strong>Bill ID:</strong> ${bill.billId}</p> <!-- Note: Should use finalBillId if set -->
-            <p><strong>Customer Name:</strong> ${finalCustomer.name}</p>
-            <p><strong>Account Number:</strong> ${finalCustomer.accountNumber}</p>
-            <p><strong>Address:</strong> ${finalCustomer.address}</p>
-            <p><strong>Telephone:</strong> ${finalCustomer.telephone}</p>
-            <p><strong>Date:</strong> <fmt:formatDate value="${finalBillDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
-            <table>
-                <thead>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Amount</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="itemStr" items="${fn:split(finalItems, ';')}">
-                    <c:set var="itemDetails" value="${fn:split(itemStr, ':')}"/>
-                    <c:if test="${fn:length(itemDetails) == 4}">
+    <c:if test="${showBillOnly}">
+        <c:choose>
+            <c:when test="${not empty finalItems}">
+                <div class="printable-bill visible">
+                    <h3>Final Bill</h3>
+                    <p><strong>Bill ID:</strong> ${finalBillId}</p>
+                    <p><strong>Customer Name:</strong> ${finalCustomer.name}</p>
+                    <p><strong>Account Number:</strong> ${finalCustomer.accountNumber}</p>
+                    <p><strong>Address:</strong> ${finalCustomer.address}</p>
+                    <p><strong>Telephone:</strong> ${finalCustomer.telephone}</p>
+                    <p><strong>Date:</strong> <fmt:formatDate value="${finalBillDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+                    <table>
+                        <thead>
                         <tr>
-                            <td>${itemDetails[0]}</td>
-                            <td>${itemDetails[1]}</td>
-                            <td>$${itemDetails[2]}</td>
-                            <td>$${itemDetails[3]}</td>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Amount</th>
                         </tr>
-                    </c:if>
-                </c:forEach>
-                </tbody>
-            </table>
-            <p><strong>Total Amount:</strong> $${finalTotalAmount}</p>
-        </div>
+                        </thead>
+                        <tbody>
+                        <c:forTokens var="item" items="${finalItems}" delims=";">
+                            <c:set var="details" value="${fn:split(item, ':')}"/>
+                            <c:set var="itemObj" value="${itemsMap[details[0]]}"/>
+                            <tr>
+                                <td>${itemObj.name}</td>
+                                <td>${details[1]}</td>
+                                <td>Rs. ${itemObj.price}</td>
+                                <td>Rs. ${details[2]}</td>
+                            </tr>
+                        </c:forTokens>
+                        </tbody>
+                    </table>
+                    <p><strong>Total Amount:</strong> Rs. ${finalTotalAmount}</p>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="error" style="margin: 20px auto; max-width: 600px;">
+                    <p>Error generating bill: ${error}</p>
+                    <a href="${pageContext.request.contextPath}/bill?accountNumber=${param.accountNumber}" class="back-btn">Back</a>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </c:if>
 </div>
 </body>
