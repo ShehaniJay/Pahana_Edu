@@ -14,7 +14,6 @@ public class Customer {
         this.telephone = telephone;
     }
 
-    // Getters and Setters
     public String getAccountNumber() { return accountNumber; }
     public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
     public String getName() { return name; }
