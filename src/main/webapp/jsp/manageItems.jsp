@@ -84,7 +84,7 @@
     </c:forEach>
     </tbody>
   </table>
-  <a href="/jsp/dashboard.jsp" class="btn btn-secondary mt-3">Back</a>
+  <a href="${pageContext.request.contextPath}/jsp/dashboard.jsp" class="btn btn-secondary mt-3">Back</a>
 </div>
 <script>
   function resetForm() {

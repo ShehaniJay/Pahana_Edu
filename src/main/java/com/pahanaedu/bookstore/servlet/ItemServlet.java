@@ -19,13 +19,21 @@ public class ItemServlet extends HttpServlet {
         ItemDAO itemDAO = new ItemDAO();
         try {
             if ("add".equals(action)) {
-                Item item = new Item();
-                item.setItemId(request.getParameter("itemId"));
-                item.setName(request.getParameter("name"));
-                item.setPrice(Double.parseDouble(request.getParameter("price")));
-                item.setStock(Integer.parseInt(request.getParameter("stock")));
-                itemDAO.addItem(item);
-                request.setAttribute("message", "Item added successfully");
+                String itemId = request.getParameter("itemId");
+                Item existingItem = itemDAO.getItem(itemId);
+                if (existingItem != null) {
+                    request.setAttribute("message", "Item ID already exists!");
+                } else {
+                    Item item = new Item();
+                    item.setItemId(itemId);
+                    item.setName(request.getParameter("name"));
+                    item.setPrice(Double.parseDouble(request.getParameter("price")));
+                    item.setStock(Integer.parseInt(request.getParameter("stock")));
+
+                    itemDAO.addItem(item);
+                    request.setAttribute("message", "Item added successfully");
+                }
+
             } else if ("update".equals(action)) {
                 Item item = new Item();
                 item.setItemId(request.getParameter("itemId"));
@@ -34,6 +42,7 @@ public class ItemServlet extends HttpServlet {
                 item.setStock(Integer.parseInt(request.getParameter("stock")));
                 itemDAO.updateItem(item);
                 request.setAttribute("message", "Item updated successfully");
+
             } else if ("delete".equals(action)) {
                 String itemId = request.getParameter("itemId");
                 itemDAO.deleteItem(itemId);

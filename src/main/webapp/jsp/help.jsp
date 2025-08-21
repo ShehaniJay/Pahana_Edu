@@ -31,6 +31,6 @@
         <li><strong>Logout</strong>: Exit the system securely.</li>
     </ul>
 </div>
-<a href="/jsp/dashboard.jsp" class="btn btn-secondary mt-3">Back</a>
+<a href="${pageContext.request.contextPath}/jsp/dashboard.jsp" class="btn btn-secondary mt-3">Back</a>
 </body>
 </html>

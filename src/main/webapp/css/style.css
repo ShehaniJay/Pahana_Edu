@@ -1,0 +1,150 @@
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.navbar {
+    margin-bottom: 30px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff6f61 0%, #6b48ff 100%);
+}
+
+.navbar-brand {
+    color: #fff !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link {
+    color: #fff !important;
+    margin: 0 15px;
+    font-size: 1.1rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #ffeb3b !important;
+    transform: scale(1.1);
+    text-decoration: none;
+}
+
+h1 {
+    color: #6b48ff;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h2 {
+    color: #ff6f61;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ff6f61;
+    padding-bottom: 5px;
+}
+
+.table {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #6b48ff;
+    color: #fff;
+}
+
+.table th {
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.table td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    transition: background 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background: #f0f0f0;
+}
+
+.table .btn {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+}
+
+.table .btn-primary {
+    background: #6b48ff;
+    border: none;
+}
+
+.table .btn-primary:hover {
+    background: #5a3fe6;
+}
+
+.table .btn-info {
+    background: #ff6f61;
+    border: none;
+}
+
+.table .btn-info:hover {
+    background: #e65b50;
+}
+
+.alert {
+    margin-top: 20px;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    .navbar-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav-link {
+        margin: 10px 0;
+    }
+    .table {
+        font-size: 0.9rem;
+    }
+}

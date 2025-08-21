@@ -6,7 +6,19 @@
   <title>Pahana Edu - Dashboard</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+  <style>
+    .note {
+      margin: 50px 0;
+      padding: 15px;
+      border: 1px solid #ffeeba;
+      border-radius: 5px;
+      color: #856404;
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+  </style>
 </head>
 <body>
 <h1>Welcome, ${sessionScope.username}</h1>
@@ -22,37 +34,11 @@
       <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
     </div>
   </nav>
-  <h2>Customer List</h2>
-  <% if (request.getAttribute("message") != null) { %>
-  <div class="alert alert-success"><%= request.getAttribute("message") %></div>
-  <% } %>
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th>Account Number</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Telephone</th>
-      <th>Units Consumed</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="customer" items="${customers}">
-      <tr>
-        <td>${customer.accountNumber}</td>
-        <td>${customer.name}</td>
-        <td>${customer.address}</td>
-        <td>${customer.telephone}</td>
-        <td>${customer.unitsConsumed}</td>
-        <td>
-          <a href="customer?action=edit&accountNumber=${customer.accountNumber}" class="btn btn-sm btn-primary">Edit</a>
-          <a href="bill?accountNumber=${customer.accountNumber}" class="btn btn-sm btn-info">Bill</a>
-        </td>
-      </tr>
-    </c:forEach>
-    </tbody>
-  </table>
+
+
+  <div class="note">
+    <strong>Note:</strong> Please ensure all customer details are updated before generating bills. New items have been added to the inventory—check the Manage Items section for details!
+  </div>
 </div>
 </body>
 </html>
