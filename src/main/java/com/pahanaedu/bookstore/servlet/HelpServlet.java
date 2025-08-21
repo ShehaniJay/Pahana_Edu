@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @WebServlet("/help")
 public class HelpServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/jsp/help.jsp").forward(request, response);
     }
 }
